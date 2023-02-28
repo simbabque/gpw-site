@@ -1,0 +1,26 @@
+name: CI to Github Pages
+
+on:
+  push:
+    branches:
+      - main
+    workflow_dispatch:
+permissions:
+  contents: write
+
+jobs:
+  build-and-deploy:
+    environment: perl
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+      - name: Create output folder
+        run: mkdir gh-pages
+      - name: Build Website
+        run: perl bin/build.pl >gh-pages/index.html
+      - name: Deploy
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          branch: gh-pages
+          folder: gh-pages
